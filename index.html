@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Farham Khademi — Software Engineer & IT Consultant</title>
+  <meta name="description" content="I design practical digital solutions that reduce IT costs, improve productivity, and put the power of technology directly into the hands of business owners." />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://farhamkh.github.io/" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Farham Khademi — Software Engineer & IT Consultant">
+  <meta property="og:description" content="I design practical digital solutions that reduce IT costs and improve productivity.">
+  <meta property="og:url" content="https://farhamkh.github.io/">
+  <meta property="og:image" content="https://farhamkh.github.io/assets/images/hero-placeholder.svg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Farham Khademi — Software Engineer & IT Consultant">
+  <meta name="twitter:description" content="I design practical digital solutions that reduce IT costs and improve productivity.">
+  <meta name="twitter:image" content="https://farhamkh.github.io/assets/images/hero-placeholder.svg">
+
+  <!-- JSON-LD (Person) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Farham Khademi",
+    "jobTitle": "Software Engineer & IT Consultant",
+    "url": "https://farhamkh.github.io",
+    "sameAs": [
+      "https://github.com/Farhamkh",
+      "https://www.linkedin.com/in/farham-khademi-3895a61a4/"
+    ],
+    "knowsAbout": [
+      "JavaScript","TypeScript","React","Next.js","Node.js","Express","Python",
+      "Scikit-learn","NLTK","Pandas","TailwindCSS","OpenAI API","Mistral","Ollama","Java","Git"
+    ],
+    "homeLocation": { "@type": "Place", "address": { "addressRegion": "NY", "addressCountry": "USA" } }
+  }
+  </script>
+
+  <!-- Accessibility helpers -->
+  <meta name="theme-color" content="#0b0b0f" />
+
+  <!-- Styles -->
+  <link rel="preload" href="assets/styles.css" as="style">
+  <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- Optional analytics (Plausible) -->
+  <!--
+  <script defer data-domain="farhamkh.github.io" src="https://plausible.io/js/script.js"></script>
+  -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Homepage">FK</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark mode">🌙</button>
+      <ul class="nav-links" role="list">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#about">About</a></li>
+        <li class="hide-sm"><a href="projects.html">All Projects</a></li>
+        <li><a id="contact-link" href="#" rel="nofollow">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-media">
+        <!-- Headshot (optional) -->
+        <img src="assets/images/headshot.jpg" alt="Portrait of Farham Khademi" class="headshot">
+        <!-- Hero image -->
+        <img src="assets/images/hero.png" alt="Abstract hero background" class="hero-img" loading="eager">
+      </div>
+      <div class="hero-text">
+        <h1 id="hero-title">Farham Khademi</h1>
+        <p class="subtitle">Software Engineer & IT Consultant</p>
+        <p class="bio">With expertise in Business and Computer Science, I design practical digital solutions that reduce IT costs, improve productivity, and put the power of technology directly into the hands of business owners.</p>
+        <div class="cta-row">
+          <a class="btn" href="#projects">View Projects</a>
+        </div>
+        <ul class="social" role="list" aria-label="Social links">
+          <li><a href="https://github.com/Farhamkh" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/farham-khademi-3895a61a4/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <!-- TODO: Add more links if needed -->
+        </ul>
+        <p class="meta">USA, NY</p>
+        <p id="email-display" class="meta">farham.dev [at] outlook [dot] com</p>
+      </div>
+    </section>
+
+    <section id="projects" class="section" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title">Highlighted Projects</h2>
+        <a class="more-link" href="projects.html" aria-label="See all projects">See all</a>
+      </div>
+      <div id="projects-grid" class="projects-grid" role="list"></div>
+    </section>
+
+    <section id="skills" class="section" aria-labelledby="skills-title">
+      <h2 id="skills-title">Skills</h2>
+      <div id="skills-wrap" class="chips" role="list"></div>
+    </section>
+
+    <section id="about" class="section" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p>
+        I bridge business goals and software execution. From web apps to AI-assisted tools,
+        my focus is building pragmatic systems that are maintainable, secure, and cost-effective.
+      </p>
+      <!-- TODO: Modify about text -->
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <p>© <span id="year"></span> Farham Khademi</p>
+    <p><a href="#" id="footer-contact">Contact</a> • <a href="projects.html">All Projects</a></p>
+  </footer>
+
+  <div id="announce" class="visually-hidden" aria-live="polite"></div>
+
+  <script defer src="assets/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+/* ===== CSS Variables & Theme ===== */
+:root {
+  --accent: #4f46e5;          /* TODO: change accent here */
+  --bg: #0b0b0f;
+  --bg-elev: #12121a;
+  --text: #e6e6f0;
+  --muted: #9aa0a6;
+  --border: #23232f;
+
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+
+  /* Typography scale */
+  --step--1: 0.9rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: 1.953rem;
+  --step-4: 2.441rem;
+
+  --space-1: .4rem;
+  --space-2: .8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2.4rem;
+  --space-6: 3.2rem;
+}
+
+[data-theme="light"] {
+  --bg: #fcfcfe;
+  --bg-elev: #ffffff;
+  --text: #0d0d12;
+  --muted: #555a60;
+  --border: #e6e8ee;
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #fcfcfe;
+    --bg-elev: #ffffff;
+    --text: #0d0d12;
+    --muted: #555a60;
+    --border: #e6e8ee;
+  }
+}
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(79,70,229,.12), transparent 40%), var(--bg);
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { max-width: 100%; height: auto; vertical-align: middle; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.skip-link:focus { position: static; width: auto; height: auto; padding: var(--space-2); background: var(--accent); color: white; }
+
+/* ===== Layout ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav {
+  max-width: 1100px; margin: 0 auto; padding: .6rem var(--space-3);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+.brand {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-weight: 700; letter-spacing: .5px;
+}
+.nav-links { margin-left: auto; display: flex; gap: var(--space-3); list-style: none; padding: 0; }
+.hide-sm { display: none; }
+@media (min-width: 720px) { .hide-sm { display: list-item; } }
+
+.theme-toggle {
+  border: 1px solid var(--border); background: var(--bg-elev); color: var(--text);
+  border-radius: 999px; padding: .4rem .6rem; cursor: pointer;
+}
+.theme-toggle:hover { background: var(--bg); }
+
+main { max-width: 1100px; margin: 0 auto; padding: var(--space-5) var(--space-3); }
+
+.section { margin-block: var(--space-6); }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+
+/* ===== Hero ===== */
+.hero {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .hero { grid-template-columns: 1.1fr 1fr; }
+}
+.hero-media { order: 2; }
+.hero-text { order: 1; }
+@media (min-width: 900px) {
+  .hero-media { order: 1; }
+  .hero-text { order: 2; }
+}
+
+.headshot {
+  width: 88px; height: 88px; border-radius: 50%;
+  border: 2px solid var(--border); background: var(--bg-elev);
+  display: inline-block; margin-bottom: var(--space-3);
+}
+
+.hero-img {
+  width: 100%; border-radius: var(--radius); border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+h1 { font-size: var(--step-4); line-height: 1.1; margin: 0 0 var(--space-2); }
+.subtitle { font-size: var(--step-1); color: var(--muted); margin: 0 0 var(--space-3); }
+.bio { margin-bottom: var(--space-4); }
+
+.cta-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .6rem 1rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--accent); color: #fff; font-weight: 600;
+  box-shadow: 0 2px 12px rgba(79,70,229,.35);
+}
+.btn.ghost { background: var(--bg-elev); color: var(--text); }
+.btn:hover { text-decoration: none; filter: brightness(1.05); }
+
+.social { display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: var(--space-3) 0 var(--space-1); }
+.meta { color: var(--muted); margin: 0; }
+
+/* ===== Projects ===== */
+.projects-grid {
+  display: grid; gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .projects-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (min-width: 1080px) {
+  .projects-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+
+.card {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--space-3);
+  display: grid; gap: var(--space-2);
+}
+.card h3 { margin: 0; font-size: var(--step-1); }
+.card p { margin: 0; color: var(--muted); }
+.card .stack { display: flex; flex-wrap: wrap; gap: .4rem; }
+.badge {
+  border: 1px solid var(--border);
+  padding: .2rem .5rem; border-radius: 999px; font-size: .8rem;
+  background: transparent; color: var(--text);
+}
+.card .links { display: flex; gap: .8rem; margin-top: .4rem; }
+
+/* ===== Chips (Skills) ===== */
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+.chips .chip {
+  padding: .4rem .7rem; border: 1px solid var(--border); border-radius: 999px;
+  background: transparent; font-size: .9rem;
+}
+.chips .chip::before {
+  content: "•"; color: var(--accent); margin-right: .4rem;
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: var(--space-4) var(--space-3); text-align: center; color: var(--muted);
+}
+
+/* ===== Utilities ===== */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
