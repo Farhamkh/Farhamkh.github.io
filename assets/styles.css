@@ -24,14 +24,16 @@
   --space-4: 1.6rem;
   --space-5: 2.4rem;
   --space-6: 3.2rem;
+
+  color-scheme: light dark; 
 }
 
 [data-theme="light"] {
   --bg: #fcfcfe;
   --bg-elev: #ffffff;
   --text: #0d0d12;
-  --muted: #555a60;
-  --border: #e6e8ee;
+  --muted: #4a4f55;
+  --border: #dfe3ea;
 }
 
 
@@ -73,6 +75,7 @@ a:hover { text-decoration: underline; }
   background: rgba(0,0,0,.25);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(8px);
 }
 .nav {
   max-width: 1100px; margin: 0 auto; padding: .6rem var(--space-3);
@@ -103,7 +106,9 @@ main { max-width: 1100px; margin: 0 auto; padding: var(--space-5) var(--space-3)
   display: grid; gap: var(--space-4);
   grid-template-columns: 1fr;
   align-items: center;
+  position: relative; /* keeps canvas behind content */
 }
+
 @media (min-width: 900px) {
   .hero { grid-template-columns: 1.1fr 1fr; }
 }
@@ -136,7 +141,7 @@ h1 { font-size: var(--step-4); line-height: 1.1; margin: 0 0 var(--space-2); }
   background: var(--accent); color: #fff; font-weight: 600;
   box-shadow: 0 2px 12px rgba(79,70,229,.35);
 }
-.btn.ghost { background: var(--bg-elev); color: var(--text); }
+.btn--ghost { background: var(--bg-elev); color: var(--text); }
 .btn:hover { text-decoration: none; filter: brightness(1.05); }
 
 .social { display: flex; gap: var(--space-2); list-style: none; padding: 0; margin: var(--space-3) 0 var(--space-1); }
@@ -197,3 +202,29 @@ h1 { font-size: var(--step-4); line-height: 1.1; margin: 0 0 var(--space-2); }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* hero canvas sits behind hero content */
+.hero-canvas {
+  position: absolute; inset: 0;
+  border-radius: var(--radius);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-text, .hero-media { position: relative; z-index: 1; }
+
+/* graph basics */
+#projects-graph { position: relative; }
+#graph-svg {
+  width: 100%; height: auto; max-height: 520px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+.node { cursor: pointer; }
+.node:focus-visible circle {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+.edge { stroke-width: 1.5; }
+#project-panel { margin-top: 1rem; }
+.projects-fallback { color: var(--muted); }
