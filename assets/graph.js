@@ -9,7 +9,7 @@ export function initGraph(root = document) {
   if (!svg) return;
 
   const data = buildGraphData(PROJECTS, TECH, THEMES);
-  const layout = layoutColumns(data); 
+  const layout = layoutColumns(data);
   renderGraph(svg, layout, data, panel);
   attachGraphInteractions(svg, panel, data);
 }
@@ -72,16 +72,16 @@ export function layoutColumns(data) {
   const PAD_X = 80;           // side padding
   const colGap = (w - PAD_X * 2) / 2;     // L, C, R spacing
   const xTheme = PAD_X;                   // left column
-  const xProj  = PAD_X + colGap;          // center column
-  const xTech  = PAD_X + colGap * 2;      // right column
+  const xProj = PAD_X + colGap;          // center column
+  const xTech = PAD_X + colGap * 2;      // right column
 
   // Vertical spacing helpers
-  const PAD_Y = 50;            // top/bottom padding
+  const PAD_Y = 80;            // top/bottom padding
   const usableH = h - PAD_Y * 2;
 
-  const themes  = nodes.filter(n => n.type === "theme");
+  const themes = nodes.filter(n => n.type === "theme");
   const projects = nodes.filter(n => n.type === "project");
-  const techs    = nodes.filter(n => n.type === "tech");
+  const techs = nodes.filter(n => n.type === "tech");
 
   // Map: project -> first theme (primary)
   const projPrimaryTheme = new Map();
@@ -125,9 +125,9 @@ export function layoutColumns(data) {
   };
 
   const pos = {};
-  themes.forEach((n, i)   => { pos[n.id] = { x: xTheme, y: yForIndex(i, themes.length)   }; });
-  projects.forEach((n, i) => { pos[n.id] = { x: xProj,  y: yForIndex(i, projects.length) }; });
-  techs.forEach((n, i)    => { pos[n.id] = { x: xTech,  y: yForIndex(i, techs.length)    }; });
+  themes.forEach((n, i) => { pos[n.id] = { x: xTheme, y: yForIndex(i, themes.length) }; });
+  projects.forEach((n, i) => { pos[n.id] = { x: xProj, y: yForIndex(i, projects.length) }; });
+  techs.forEach((n, i) => { pos[n.id] = { x: xTech, y: yForIndex(i, techs.length) }; });
 
   // Keep inside bounds (account for label to the right of tech/project)
   const PAD = 24, LABEL_PAD = 90;
@@ -179,8 +179,8 @@ export function layoutRadial(data) {
 
   // ---- 2) PROJECTS around each theme (wider arc & bigger radius) ----
   const projPos = {};
-  const projectRadius = 230;            
-  const arcSpread = Math.PI / 1.6;      
+  const projectRadius = 230;
+  const arcSpread = Math.PI / 1.6;
   themes.forEach(th => {
     const list = projectsByTheme.get(th.id) || [];
     const n = list.length;
@@ -261,8 +261,8 @@ export function layoutRadial(data) {
     }
   }
   // Keep nodes inside the SVG (leave room for labels on the right)
-  const PAD = 28;          
-  const LABEL_PAD = 90;    
+  const PAD = 28;
+  const LABEL_PAD = 90;
 
   nodes.forEach(n => {
     const p = pos[n.id];
@@ -307,9 +307,9 @@ function renderGraph(svg, layout, data, panel) {
     line.setAttribute("y2", pos[e.target].y);
     line.setAttribute("class", `edge edge--${e.type}`);
     line.setAttribute("data-edge-id", e.id);
-    line.setAttribute("stroke", "var(--border)");
+    line.setAttribute("stroke", "var(--edge)");
     line.setAttribute("stroke-linecap", "round");
-    if (e.type === "theme") line.setAttribute("stroke-dasharray", "4 4");
+    if (e.type === "theme") line.setAttribute("class", "edge edge--theme");;
     gEdges.appendChild(line);
   });
   svg.appendChild(gEdges);
@@ -338,26 +338,29 @@ function renderGraph(svg, layout, data, panel) {
     circle.setAttribute("stroke-width", "1.5");
     g.appendChild(circle);
 
+    // AFTER the <circle>, BEFORE appending to gNodes:
     const label = document.createElementNS(NS, "text");
     label.textContent = n.label;
     label.setAttribute("fill", "var(--muted)");
     label.setAttribute("font-size", "12.5");
     label.setAttribute("style", "pointer-events:none;");
 
-    // Position by type:
-    // - themes: centered *below* the big circle
-    // - projects/tech: left-aligned, nudged to the right of the node
-    if (n.type === "theme") {
-      label.setAttribute("x", 0);
-      label.setAttribute("y", r + 16);
+    // ⬇️ change this conditional:
+    if (n.type === "theme" || n.type === "project") {
+      // center the label under the bubble
+      label.setAttribute("y", r + 16);           // push below circle
       label.setAttribute("text-anchor", "middle");
+      // (optional, keeps text baseline predictable)
+      label.setAttribute("dominant-baseline", "hanging");
     } else {
-      label.setAttribute("x", r + 12);  // ≈ “x + 18” but relative to the group
-      label.setAttribute("y", 4);       // slight vertical centering
+      // tech: keep label to the right
+      label.setAttribute("x", r + 12);
+      label.setAttribute("y", 4);
       label.setAttribute("text-anchor", "start");
     }
 
     g.appendChild(label);
+
 
 
     gNodes.appendChild(g);
@@ -429,7 +432,7 @@ function attachGraphInteractions(svg, panel, data) {
 function fillPanel(panel, nodeId, data) {
   if (!panel) return;
   const projId = nodeId.startsWith("proj:") ? nodeId.replace("proj:", "") : null;
-  if (!projId) return; 
+  if (!projId) return;
 
   const p = data.projMap[projId];
   if (!p) return;

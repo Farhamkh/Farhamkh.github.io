@@ -26,6 +26,8 @@
   --space-6: 3.2rem;
 
   color-scheme: light dark; 
+  --edge: #3a4356;       /* visible on dark bg */
+  --edge-weak: #4a556b;  /* dotted theme links */
 }
 
 [data-theme="light"] {
@@ -34,6 +36,8 @@
   --text: #0d0d12;
   --muted: #4a4f55;
   --border: #dfe3ea;
+  --edge: #8892a6;       /* visible on white */
+  --edge-weak: #b0b8c6;  /* still visible but lighter */
 }
 
 
@@ -250,10 +254,10 @@ h1 { font-size: var(--step-4); line-height: 1.1; margin: 0 0 var(--space-2); }
 .edge.is-active { stroke: var(--accent); opacity: .95; }
 .node { cursor: pointer; }
 .node:focus-visible circle { stroke: var(--accent); stroke-width: 2.5; }
-.edge { stroke: rgba(255,255,255,.18); stroke-width: 2; }
+.edge { stroke: var(--edge); stroke-width: 2; }
 .edge--theme { stroke-dasharray: 6 6; opacity: .6; }   /* dotted to themes */
 .edge--tech  { opacity: .9; }                          /* solid to tech */
-
+.edge.edge--theme { stroke: var(--edge-weak); stroke-dasharray: 6 6; }
 
 #project-panel { margin-top: 1rem; }
 .projects-fallback { color: var(--muted); }
