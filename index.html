@@ -89,7 +89,7 @@
         <!-- Headshot (optional) -->
         <img src="assets/images/headshot.jpg" alt="Portrait of Farham Khademi" class="headshot">
         <!-- Hero image -->
-        
+
       </div>
       <div class="hero-text">
         <h1 id="hero-title">Farham Khademi</h1>
@@ -100,6 +100,9 @@
         <div class="cta-row">
           <a class="btn" href="#projects">View Projects</a>
           <a class="btn btn--ghost" href="projects.html">All Projects</a>
+          <!-- inside .cta-row -->
+          <a class="btn btn--ghost" href="#ai-companion">Ask AI</a>
+
         </div>
 
         <ul class="social" role="list" aria-label="Social links">
@@ -134,6 +137,70 @@
       </noscript>
     </section>
 
+    <section id="ai-companion" class="section" aria-labelledby="ai-title">
+      <div class="ai-card" role="region" aria-describedby="ai-desc">
+        <header class="ai-header">
+          <div class="ai-avatar" aria-hidden="true">🤖</div>
+          <h2 id="ai-title">AI Companion</h2>
+        </header>
+
+        <!-- Intro / loader -->
+        <div class="ai-intro" id="ai-intro">
+          <p id="ai-desc" class="ai-note">
+            Runs locally in your browser. No data leaves your device.
+          </p>
+          <button id="ai-start" class="btn" type="button">Start Chat</button>
+
+          <div class="ai-progress" id="ai-progress" hidden aria-live="polite">
+            <div class="bar"><span id="ai-bar" style="width:0%"></span></div>
+            <p class="status" id="ai-status">Idle…</p>
+          </div>
+        </div>
+
+        <!-- Chat UI (hidden until model ready) -->
+        <div class="ai-chat" id="ai-chat" hidden>
+          <div class="ai-log" id="ai-log" aria-live="polite" aria-busy="false"></div>
+
+          <div class="ai-chips" id="ai-chips" role="list">
+            <button class="chip" data-prompt="Tell me about ChicAI">Tell me about ChicAI</button>
+            <button class="chip" data-prompt="What skills does Farham use?">What skills does Farham use?</button>
+            <button class="chip" data-prompt="Which projects use OpenAI?">Which projects use OpenAI?</button>
+          </div>
+
+          <form class="ai-composer" id="ai-form" autocomplete="off">
+            <label class="visually-hidden" for="ai-input">Message</label>
+            <textarea id="ai-input" rows="2" placeholder="Ask about projects, skills, anything…" required></textarea>
+            <button id="ai-send" class="btn" type="submit">Send</button>
+            <button id="ai-clear" class="linklike" type="button" title="Clear local chat history">Clear chat</button>
+          </form>
+        </div>
+
+        <!-- Unsupported (WebGPU missing / load failure) -->
+        <div class="ai-unsupported" id="ai-unsupported" hidden role="note">
+          <p><strong>Device not supported.</strong> This requires a browser with WebGPU (e.g., recent Chrome/Edge).</p>
+          <p>Quick FAQ:</p>
+          <ul class="projects-fallback">
+            <li><strong>Is my data sent anywhere?</strong> No—chat runs locally.</li>
+            <li><strong>Why can’t it run here?</strong> Your browser/OS may not support WebGPU.</li>
+            <li><strong>Alternative?</strong> Use the Projects section or contact me directly.</li>
+          </ul>
+        </div>
+
+        <!-- No-JS fallback -->
+        <noscript>
+          <div class="ai-noscript">
+            <p><strong>AI Companion requires JavaScript.</strong></p>
+            <ul class="projects-fallback">
+              <li>About: I build pragmatic, cost-effective software & AI integrations.</li>
+              <li>Projects: Quest, ChicAI, AI-Chat-Hub, and more on the Projects page.</li>
+              <li>Skills: JavaScript/TypeScript, React/Next.js, Node, Python, OpenAI, Mistral, Ollama.</li>
+            </ul>
+          </div>
+        </noscript>
+      </div>
+    </section>
+
+
     <section id="skills" class="section" aria-labelledby="skills-title">
       <h2 id="skills-title">Skills</h2>
       <div id="skills-wrap" class="chips" role="list"></div>
@@ -167,5 +234,15 @@
     if (document.getElementById('graph-svg')) initGraph();
   </script>
 </body>
+
+<script type="module">
+  import { initHero } from './assets/hero.js';
+  import { initGraph } from './assets/graph.js';
+  import { initAICompanion } from './assets/ai.js';
+
+  initHero('.hero-canvas');
+  if (document.getElementById('graph-svg')) initGraph();
+  initAICompanion('#ai-companion');
+</script>
 
 </html>
