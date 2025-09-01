@@ -40,31 +40,48 @@ export async function createAdapter({ onProgress } = {}) {
         supportsStreaming: true,
         /**
          * @param {string} userText
-         * @param {{ onToken?: (t:string)=>void, systemPrompt?: string }} opts
+         * @param {{ onToken?: (t:string)=>void, systemPrompt?: string, signal?: AbortSignal }} opts
          */
-       
-        async generate(userText, { onToken, systemPrompt } = {}) {
+
+        async generate(userText, { onToken, systemPrompt, signal } = {}) {
             const messages = [];
-            if (systemPrompt) {
-                messages.push({ role: "system", content: systemPrompt });
-            }
+            if (systemPrompt) messages.push({ role: "system", content: systemPrompt });
             messages.push({ role: "user", content: userText });
 
+            if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+            const onAbort = () => {
+                try {
+                    // Some WebLLM builds expose interrupt APIs; call if present
+                    engine.interruptGenerate?.();
+                    engine.reset_chat?.();
+                } catch { }
+            };
+
+            signal?.addEventListener('abort', onAbort, { once: true });
+
+
+            try {
             if (onToken) {
                 const stream = await engine.chat.completions.create({
                     messages,
                     stream: true,
                     stream_options: { include_usage: false },
                 });
+
                 for await (const chunk of stream) {
+                    if (signal?.aborted) break;
                     const t = chunk?.choices?.[0]?.delta?.content ?? "";
                     if (t) onToken(t);
                 }
                 return ""; // streamed
             } else {
+                if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
                 const r = await engine.chat.completions.create({ messages });
                 return r?.choices?.[0]?.message?.content ?? "";
             }
+        } finally {
+            signal?.removeEventListener('abort', onAbort);
+        }
         },
         dispose() {
             try { engine.unload(); } catch { }
