@@ -8,32 +8,41 @@ export function initAICompanion(rootSel = '#ai-companion') {
   if (!root) return;
 
   const el = {
-    intro:      root.querySelector('#ai-intro'),
-    start:      root.querySelector('#ai-start'),
-    progWrap:   root.querySelector('#ai-progress'),
-    progBar:    root.querySelector('#ai-bar'),
-    progText:   root.querySelector('#ai-status'),
-    chatWrap:   root.querySelector('#ai-chat'),
-    log:        root.querySelector('#ai-log'),
-    chips:      root.querySelector('#ai-chips'),
-    form:       root.querySelector('#ai-form'),
-    input:      root.querySelector('#ai-input'),
-    send:       root.querySelector('#ai-send'),
-    clear:      root.querySelector('#ai-clear'),
-    unsupported:root.querySelector('#ai-unsupported'),
+    intro:        root.querySelector('#ai-intro'),
+    start:        root.querySelector('#ai-start'),
+    progWrap:     root.querySelector('#ai-progress'),
+    progBar:      root.querySelector('#ai-bar'),
+    progText:     root.querySelector('#ai-status'),
+    chatWrap:     root.querySelector('#ai-chat'),
+    log:          root.querySelector('#ai-log'),
+    chips:        root.querySelector('#ai-chips'),
+    form:         root.querySelector('#ai-form'),
+    input:        root.querySelector('#ai-input'),
+    send:         root.querySelector('#ai-send'),
+    clear:        root.querySelector('#ai-clear'),
+    unsupported:  root.querySelector('#ai-unsupported'),
+    card:         root.querySelector('.ai-card')
   };
 
   let adapter = null;
   let busy = false;
   let history = loadHistory();
 
-  // Render any stored history
+  // WebGPU gate
+  if (!navigator.gpu) {
+    el.unsupported.hidden = false;
+    el.card?.classList.add('is-disabled');
+    if (el.start) el.start.disabled = true;
+    return;
+  }
+
+  // Restore history
   if (history.length) {
     showChat();
     history.forEach(msg => appendBubble(msg.role, msg.content));
   }
 
-  // Events
+  // Start -> lazy-load model
   el.start?.addEventListener('click', async () => {
     if (busy) return;
     busy = true;
@@ -48,25 +57,24 @@ export function initAICompanion(rootSel = '#ai-companion') {
         }
       });
 
-      if (!adapter) {
-        // unsupported or load failed
-        el.intro.hidden = true;
-        el.chatWrap.hidden = true;
-        el.unsupported.hidden = false;
-        return;
-      }
-
-      showChat(); // switch UI
+      if (!adapter) throw new Error('Adapter did not initialize.');
+      showChat();
     } catch (err) {
-      console.error(err);
-      el.progText.textContent = 'Load failed. This device may not support in-browser models.';
-      el.unsupported.hidden = false;
-      el.intro.hidden = true;
+      console.error('[AI] load error:', err);
+      el.progText.textContent = 'Load failed.';
+      const p = document.createElement('p');
+      p.style.color = 'var(--muted)';
+      p.style.marginTop = '.5rem';
+      p.textContent = `Reason: ${err?.message || String(err)}`;
+      el.progWrap.appendChild(p);
+      el.intro.hidden = false;
+      el.start.disabled = false;
     } finally {
       busy = false;
     }
   });
 
+  // Chips -> fill input
   el.chips?.addEventListener('click', (e) => {
     const b = e.target.closest('.chip');
     if (!b) return;
@@ -74,6 +82,7 @@ export function initAICompanion(rootSel = '#ai-companion') {
     el.input.focus();
   });
 
+  // Clear chat
   el.clear?.addEventListener('click', () => {
     history = [];
     saveHistory(history);
@@ -82,25 +91,23 @@ export function initAICompanion(rootSel = '#ai-companion') {
     el.input.focus();
   });
 
+  // Send
   el.form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!adapter || busy) return;
     const text = el.input.value.trim();
     if (!text) return;
 
-    // add user message
     appendBubble('user', text);
     history.push({ role: 'user', content: text });
     saveHistory(history);
     el.input.value = '';
     el.input.focus();
 
-    // get assistant response
     busy = true;
     el.log.setAttribute('aria-busy', 'true');
-
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let botEl = appendBubble('assistant', reduceMotion ? '' : ''); // target element to stream into
+    let botEl = appendBubble('assistant', '');
     let out = '';
 
     try {
@@ -113,8 +120,7 @@ export function initAICompanion(rootSel = '#ai-companion') {
           }
         });
       } else {
-        const full = await adapter.generate(text, {});
-        out = full;
+        out = await adapter.generate(text, {});
         botEl.textContent = out;
       }
     } catch (err) {
@@ -130,12 +136,12 @@ export function initAICompanion(rootSel = '#ai-companion') {
     }
   });
 
+  // Helpers
   function showChat() {
     el.intro.hidden = true;
     el.progWrap.hidden = true;
     el.chatWrap.hidden = false;
   }
-
   function appendBubble(role, content) {
     const b = document.createElement('div');
     b.className = `ai-bubble ${role === 'user' ? 'user' : 'bot'}`;
@@ -146,20 +152,12 @@ export function initAICompanion(rootSel = '#ai-companion') {
   }
 }
 
-function scrollLogToBottom(box) {
-  box.scrollTop = box.scrollHeight;
-}
-
+function scrollLogToBottom(box) { box.scrollTop = box.scrollHeight; }
 function loadHistory() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
 }
 function saveHistory(arr) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.slice(-MAX_HISTORY)));
-  } catch { /* storage may be full/blocked */ }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.slice(-MAX_HISTORY))); }
+  catch {}
 }

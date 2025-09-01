@@ -1,13 +1,11 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <title>Farham Khademi — Software Engineer & IT Consultant</title>
-  <meta name="description"
-    content="I design practical digital solutions that reduce IT costs, improve productivity, and put the power of technology directly into the hands of business owners." />
+  <meta name="description" content="I design practical digital solutions that reduce IT costs, improve productivity, and put the power of technology directly into the hands of business owners." />
 
   <!-- Canonical -->
   <link rel="canonical" href="https://farhamkh.github.io/" />
@@ -19,16 +17,14 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Farham Khademi — Software Engineer & IT Consultant">
-  <meta property="og:description"
-    content="I design practical digital solutions that reduce IT costs and improve productivity.">
+  <meta property="og:description" content="I design practical digital solutions that reduce IT costs and improve productivity.">
   <meta property="og:url" content="https://farhamkh.github.io/">
   <meta property="og:image" content="https://farhamkh.github.io/assets/images/hero.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Farham Khademi — Software Engineer & IT Consultant">
-  <meta name="twitter:description"
-    content="I design practical digital solutions that reduce IT costs and improve productivity.">
+  <meta name="twitter:description" content="I design practical digital solutions that reduce IT costs and improve productivity.">
   <meta name="twitter:image" content="https://farhamkh.github.io/assets/images/hero.png">
 
   <!-- JSON-LD (Person) -->
@@ -59,9 +55,7 @@
   <link rel="stylesheet" href="assets/styles.css">
 
   <!-- Optional analytics (Plausible) -->
-  <!--
-  <script defer data-domain="farhamkh.github.io" src="https://plausible.io/js/script.js"></script>
-  -->
+  <!-- <script defer data-domain="farhamkh.github.io" src="https://plausible.io/js/script.js"></script> -->
 </head>
 
 <body>
@@ -70,8 +64,7 @@
   <header class="site-header" role="banner">
     <nav class="nav" aria-label="Primary">
       <a class="brand" href="/" aria-label="Homepage">FK</a>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false"
-        title="Toggle dark mode">🌙</button>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark mode">🌙</button>
       <ul class="nav-links" role="list">
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
@@ -86,30 +79,24 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-canvas" aria-hidden="true"></div>
       <div class="hero-media">
-        <!-- Headshot (optional) -->
         <img src="assets/images/headshot.jpg" alt="Portrait of Farham Khademi" class="headshot">
-        <!-- Hero image -->
-
       </div>
       <div class="hero-text">
         <h1 id="hero-title">Farham Khademi</h1>
         <p class="subtitle">Software Engineer & IT Consultant</p>
-        <p class="bio">With expertise in Business and Computer Science, I design practical digital solutions that reduce
-          IT costs, improve productivity, and put the power of technology directly into the hands of business owners.
+        <p class="bio">
+          With expertise in Business and Computer Science, I design practical digital solutions that reduce IT costs,
+          improve productivity, and put the power of technology directly into the hands of business owners.
         </p>
         <div class="cta-row">
           <a class="btn" href="#projects">View Projects</a>
           <a class="btn btn--ghost" href="projects.html">All Projects</a>
-          <!-- inside .cta-row -->
           <a class="btn btn--ghost" href="#ai-companion">Ask AI</a>
-
         </div>
 
         <ul class="social" role="list" aria-label="Social links">
           <li><a href="https://github.com/Farhamkh" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/farham-khademi-3895a61a4/" target="_blank"
-              rel="noopener">LinkedIn</a></li>
-          <!-- TODO: Add more links if needed -->
+          <li><a href="https://www.linkedin.com/in/farham-khademi-3895a61a4/" target="_blank" rel="noopener">LinkedIn</a></li>
         </ul>
         <p class="meta">USA, NY</p>
         <p id="email-display" class="meta">farham.dev [at] outlook [dot] com</p>
@@ -146,9 +133,7 @@
 
         <!-- Intro / loader -->
         <div class="ai-intro" id="ai-intro">
-          <p id="ai-desc" class="ai-note">
-            Runs locally in your browser. No data leaves your device.
-          </p>
+          <p id="ai-desc" class="ai-note">Runs locally in your browser. No data leaves your device.</p>
           <button id="ai-start" class="btn" type="button">Start Chat</button>
 
           <div class="ai-progress" id="ai-progress" hidden aria-live="polite">
@@ -186,7 +171,6 @@
           </ul>
         </div>
 
-        <!-- No-JS fallback -->
         <noscript>
           <div class="ai-noscript">
             <p><strong>AI Companion requires JavaScript.</strong></p>
@@ -200,7 +184,6 @@
       </div>
     </section>
 
-
     <section id="skills" class="section" aria-labelledby="skills-title">
       <h2 id="skills-title">Skills</h2>
       <div id="skills-wrap" class="chips" role="list"></div>
@@ -212,7 +195,6 @@
         I bridge business goals and software execution. From web apps to AI-assisted tools,
         my focus is building pragmatic systems that are maintainable, secure, and cost-effective.
       </p>
-      <!-- TODO: Modify about text -->
     </section>
   </main>
 
@@ -223,26 +205,22 @@
 
   <div id="announce" class="visually-hidden" aria-live="polite"></div>
 
+  <!-- Site script (cards, theme toggle, etc.) -->
   <script type="module" src="assets/main.js"></script>
+
+  <!-- Single initializer block -->
   <script type="module">
     import { initHero } from './assets/hero.js';
     import { initGraph } from './assets/graph.js';
-    // main.js is already loaded via <script defer>; if you prefer modules only:
-    // import './assets/main.js';
+    import { initAICompanion } from './assets/ai.js';
 
-    initHero('.hero-canvas');
-    if (document.getElementById('graph-svg')) initGraph();
+    window.addEventListener('DOMContentLoaded', () => {
+      initHero('.hero-canvas');
+      if (document.getElementById('graph-svg')) {
+        initGraph();
+      }
+      initAICompanion('#ai-companion');
+    });
   </script>
 </body>
-
-<script type="module">
-  import { initHero } from './assets/hero.js';
-  import { initGraph } from './assets/graph.js';
-  import { initAICompanion } from './assets/ai.js';
-
-  initHero('.hero-canvas');
-  if (document.getElementById('graph-svg')) initGraph();
-  initAICompanion('#ai-companion');
-</script>
-
 </html>
