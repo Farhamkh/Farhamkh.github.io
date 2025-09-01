@@ -97,3 +97,12 @@ export const THEMES = dedupe(PROJECTS.flatMap(p => p.themes || []));
 export const TECH = dedupe(
   PROJECTS.flatMap(p => (p.tech || []).map(norm))
 ).sort((a, b) => a.localeCompare(b));
+
+export const SKILLS = [
+  "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Express",
+  "Python", "Pandas", "Scikit-learn", "NLTK",
+  "MongoDB", "SQL",
+  "OpenAI", "Mistral", "Ollama",
+  "Tailwind", "Bootstrap",
+  "Git", "Figma", "REST APIs"
+];

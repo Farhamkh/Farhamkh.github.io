@@ -1,7 +1,36 @@
 import { createAdapter } from './llm-adapter.js';
+import { PROJECTS, SKILLS } from './data.js';
 
 const STORAGE_KEY = 'ai:history:v1';
 const MAX_HISTORY = 20;
+
+// ---- Built content within data.js ----
+const SYSTEM_BASE = `You are an AI companion for Farham Khademi’s portfolio.
+Farham is a freelancer who bridges business goals and software execution.
+From web apps to AI-assisted tools, his focus is building pragmatic systems
+that are maintainable, secure, and cost-effective.
+
+Answer questions concisely and helpfully. If asked about projects, skills, or tech,
+use the details below. If you don't know, say so and suggest visiting the repo or projects page.`;
+
+function buildPortfolioContext(projects, skills) {
+  const skillsLine = skills && skills.length
+    ? `Skills: ${skills.join(', ')}\n\n`
+    : '';
+
+  const projLines = (projects || []).map(p => {
+    const tech = (p.tech || []).join(', ');
+    return `• ${p.title}: ${p.blurb} [Tech: ${tech}]`;
+  }).join('\n');
+
+  // keep small for tiny models
+  const ctx = `${skillsLine}Projects:\n${projLines}`;
+  return ctx.length > 3000 ? ctx.slice(0, 3000) + '\n…' : ctx;
+}
+
+function getSystemPrompt() {
+  return `${SYSTEM_BASE}\n\n${buildPortfolioContext(PROJECTS, SKILLS)}`;
+}
 
 export function initAICompanion(rootSel = '#ai-companion') {
   const root = document.querySelector(rootSel);
@@ -109,10 +138,12 @@ export function initAICompanion(rootSel = '#ai-companion') {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let botEl = appendBubble('assistant', '');
     let out = '';
+    const SYSTEM_PROMPT = getSystemPrompt(); // always fresh from data.js
 
     try {
       if (adapter.supportsStreaming && !reduceMotion) {
         await adapter.generate(text, {
+          systemPrompt: SYSTEM_PROMPT,
           onToken: (t) => {
             out += t;
             botEl.textContent = out;
@@ -120,7 +151,7 @@ export function initAICompanion(rootSel = '#ai-companion') {
           }
         });
       } else {
-        out = await adapter.generate(text, {});
+        out = await adapter.generate(text, { systemPrompt: SYSTEM_PROMPT });
         botEl.textContent = out;
       }
     } catch (err) {
